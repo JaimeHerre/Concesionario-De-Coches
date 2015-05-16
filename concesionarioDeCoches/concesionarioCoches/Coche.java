@@ -1,54 +1,108 @@
-package pgn.examenMarzo.concesionarioCoches;
+package concesionarioCoches;
 
+import java.io.Serializable;
 import java.util.regex.Pattern;
-
-public class Coche {
+/**
+ * Clase Coche
+ * @author Jaime herrerias;
+ * @version 1.0
+ *
+ */
+public class Coche  implements Serializable{
+	/**
+	 * Matricula del cocje
+	 */
 	private String matricula;
+	/**
+	 * Color del coche
+	 */
 	private Color color;
+	/**
+	 * Modelo del coche
+	 */
 	private Modelo modelo;
+	/**
+	 * Patr�n para la matr�cula
+	 */
 	static final private Pattern patternMatricula = Pattern
 			.compile("^\\d{4}[ -]?[[B-Z]&&[^QEIOU]]{3}$");
 
-	private Coche(String matricula, Color color, Modelo modelo) {
+	/**
+	 * Constructor de coche
+	 * @param matricula
+	 * @param color
+	 * @param modelo
+	 * @throws MatriculaNoValidaException
+	 * @throws ColorNoValidoException
+	 * @throws ModeloNoValidoException
+	 */
+	Coche(String matricula, Color color, Modelo modelo) throws MatriculaNoValidaException, ColorNoValidoException, ModeloNoValidoException {
 		super();
 		setMatricula(matricula);
 		setColor(color);
 		setModelo(modelo);
 	}
 
-	private Coche(String matricula) {
+	/**
+	 * Constructor de coche
+	 * @param matricula
+	 * @throws MatriculaNoValidaException
+	 */
+	Coche(String matricula) throws MatriculaNoValidaException {
 		setMatricula(matricula);
 	}
 
-	static Coche instanciarCoche(String matricula, Color color, Modelo modelo) {
-		if (esValida(matricula) && color != null && modelo != null)
-			return new Coche(matricula, color, modelo);
-		return null;
-	}
-
-	static Coche instanciarCoche(String matricula) {
-		if (esValida(matricula))
-			return new Coche(matricula);
-		return null;
-	}
-
-	private static boolean esValida(String matricula) {
+	/**
+	 * Comprueba si la matr�cula es v�lida
+	 * @param matricula
+	 * @return true si es v�lida, false si no es v�lida
+	 */
+	public static boolean esValida(String matricula) {
 		return patternMatricula.matcher(matricula).matches();
 	}
 
-	private void setMatricula(String matricula) {
-		this.matricula = matricula;
+	/**
+	 * Establece la matr�cula de Coche
+	 * @param matricula
+	 * @throws MatriculaNoValidaException
+	 */
+	private void setMatricula(String matricula) throws MatriculaNoValidaException {
+		if (esValida(matricula)) {
+			this.matricula = matricula;
+		}else
+			throw new MatriculaNoValidaException("La matr�cula no es v�lida");
+		
 	}
 
-	Color getColor() {
+	/**
+	 * Obtiene el color de Coche
+	 * @return el color de Coche
+	 */
+	public Color getColor() {
 		return color;
 	}
 
-	private void setColor(Color color) {
-		this.color = color;
+	/**
+	 * Establece el color de Coche
+	 * @param color
+	 * @throws ColorNoValidoException
+	 */
+	private void setColor(Color color) throws ColorNoValidoException {
+		if (color == null) {
+			throw new ColorNoValidoException("El color no es v�lido");
+		}else
+			this.color = color;
 	}
 
-	private void setModelo(Modelo modelo) {
+	/**
+	 * Establece el color de Coche
+	 * @param modelo
+	 * @throws ModeloNoValidoException
+	 */
+	private void setModelo(Modelo modelo) throws ModeloNoValidoException {
+		if (modelo == null) {
+			throw new ModeloNoValidoException("El modelo no es v�lido");
+		}
 		this.modelo = modelo;
 	}
 
@@ -62,7 +116,7 @@ public class Coche {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((matricula == null) ? 0 : matricula.hashCode());
+				+ ((getMatricula() == null) ? 0 : getMatricula().hashCode());
 		return result;
 	}
 
@@ -80,8 +134,8 @@ public class Coche {
 		if (getClass() != obj.getClass())
 			return false;
 		Coche other = (Coche) obj;
-		if (matricula == null) {
-			if (other.matricula != null)
+		if (getMatricula() == null) {
+			if (other.getMatricula() != null)
 				return false;
 		} else if (!matricula.equals(other.matricula))
 			return false;
@@ -95,8 +149,22 @@ public class Coche {
 	 */
 	@Override
 	public String toString() {
-		return "\nCoche [matricula=" + matricula + ", color=" + color
-				+ ", modelo=" + modelo + "]";
+		return "\nCoche [matricula=" + getMatricula() + ", color=" + color
+				+ ", modelo=" + getModelo() + "]";
 	}
+
+    /**
+     * @return the matricula
+     */
+    public String getMatricula() {
+        return matricula;
+    }
+
+    /**
+     * @return the modelo
+     */
+    public Modelo getModelo() {
+        return modelo;
+    }
 
 }

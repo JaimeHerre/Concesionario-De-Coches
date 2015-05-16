@@ -1,61 +1,79 @@
-package pgn.examenMarzo.concesionarioCoches;
+package concesionarioCoches;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
- * No pueden existir dos coches con la misma matrícula en el almacén del concesinario
- * no puede añadirse un coche al concecionario con alguno de sus atributos inválidos. Han de conocerse todas sus características 
+ * No pueden existir dos coches con la misma matrï¿½cula en el almacï¿½n del concesinario
+ * no puede aï¿½adirse un coche al concecionario con alguno de sus atributos invï¿½lidos. Han de conocerse todas sus caracterï¿½sticas 
  * Ninguno de los valores puede ser por defecto
  */
 /**
- * El nombre del concesionario es "IES Gran Capitán".
+ * El nombre del concesionario es "IES Gran Capitï¿½n".
  * 
- * Lógicamente, no podrá añadirse un coche inválido glmacén del concesinario)
+ * Lï¿½gicamente, no podrï¿½ aï¿½adirse un coche invï¿½lido glmacï¿½n del concesinario)
  * 
- * Han de conocerse todas sus características Ninguno de los valores puede ser
+ * Han de conocerse todas sus caracterï¿½sticas Ninguno de los valores puede ser
  * por defecto
  * 
  * @author Jaime herrerias;
  * 
  */
-public class Concesionario {
+public class Concesionario   implements Serializable {
 	/**
-	 * colección de coches. No puede tener null
+	 * colecciï¿½n de coches. No puede tener null
 	 */
 	private ArrayList<Coche> almacen = new ArrayList<Coche>();
-	private final String nombre = "IES Gran Capitán";
+	private final String nombre = "IES Gran Capitï¿½n";
 
-	boolean annadir(String matricula, Color color, Modelo modelo) {
-		Coche coche = Coche.instanciarCoche(matricula, color, modelo);
-		if (coche == null || almacen.contains(coche))
-			return false;
-		return almacen.add(coche);
+	public void annadir(String matricula, Color color, Modelo modelo) throws MatriculaNoValidaException, ColorNoValidoException, ModeloNoValidoException, CocheYaExisteException {
+            
+            Coche coche = new Coche(matricula, color, modelo);
+		if (almacen.contains(coche))
+			throw new CocheYaExisteException("El coche ya existe");
+		else
+		almacen.add(coche);
 	}
-
-	boolean eliminar(String matricula) {
-		return almacen.remove(Coche.instanciarCoche(matricula));
+        
+	boolean eliminar(String matricula) throws MatriculaNoValidaException, CocheNoExisteException {
+           if(almacen.remove(new Coche(matricula))){
+               return true;
+           }else{
+              throw new CocheNoExisteException("El coche no existe");
+           }
+              
 	}
 
 	
-	int size() {
+	public int size() {
 		return almacen.size();
 	}
 
 	/**
-	 * Devuelve el Coche del almacén indicado por la matrícula
+	 * Devuelve el Coche del almacï¿½n indicado por la matrï¿½cula
 	 * 
 	 * @param matricula
-	 *            Matrícula a buscar
-	 * @return Coche contenido en el almacén. null si no existe
+	 *            Matrï¿½cula a buscar
+	 * @return Coche contenido en el almacï¿½n. null si no existe
+	 * @throws MatriculaNoValidaException 
+	 * @throws CocheNoExisteException 
 	 */
-	Coche get(String matricula) {
-		Coche coche = Coche.instanciarCoche(matricula);
+	Coche get(String matricula) throws MatriculaNoValidaException, CocheNoExisteException {
+		Coche coche = new Coche(matricula);
 		int index = almacen.indexOf(coche);
 		if (index != -1) {
 			return almacen.get(index);
-		}
-		return null;
+		}else
+		throw new CocheNoExisteException("El coche no existe");
 	}
+        
+        public Coche get(int indice) {
+            Coche c=null;
+            if ((indice >=0) && (indice<=almacen.size())){
+                c=almacen.get(indice);
+            }
+            return c;
+        }
 
 	/*
 	 * (non-Javadoc)
@@ -66,6 +84,7 @@ public class Concesionario {
 	public String toString() {
 		return "Concesionario " + nombre + "[almacen=" + almacen + "]";
 	}
+      
 
 	public ArrayList<Coche> getCochesColor(Color color) {
 		ArrayList<Coche> arrCochesColor = new ArrayList<Coche>();
@@ -75,5 +94,11 @@ public class Concesionario {
 		}
 		return arrCochesColor;
 	}
+
+    public void vaciar() {
+        almacen.clear();
+    }
+        
+        
 
 }
