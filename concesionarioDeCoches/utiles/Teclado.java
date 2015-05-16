@@ -1,4 +1,4 @@
-package pgn.examenMarzo.utiles;
+package utiles;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
