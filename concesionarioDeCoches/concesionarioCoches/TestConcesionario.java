@@ -54,7 +54,7 @@ public class TestConcesionario extends ConcesionarioTest {
 			}
 		} while (true);
 	}
-
+/** esto es una modificación echa por Juan Antonio Cubero Lopez*/
 	private static void getCoche() {
 		Coche coche = concesionario.get(Teclado
 				.leerCadena("Introduce la matrícula"));
