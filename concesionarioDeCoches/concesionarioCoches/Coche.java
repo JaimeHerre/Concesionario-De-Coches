@@ -1,4 +1,4 @@
-package concesionarioCoches;
+﻿package concesionarioCoches;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class Coche  implements Serializable{
 	/**
-	 * Matricula del cocje
+	 * Matricula del coche
 	 */
 	private String matricula;
 	/**
@@ -58,6 +58,7 @@ public class Coche  implements Serializable{
 	 * @return true si es v�lida, false si no es v�lida
 	 */
 	public static boolean esValida(String matricula) {
+
 		return patternMatricula.matcher(matricula).matches();
 	}
 
@@ -164,6 +165,7 @@ public class Coche  implements Serializable{
      * @return the modelo
      */
     public Modelo getModelo() {
+
         return modelo;
     }
 
